@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaledoshop — Votre Escale Tropicale</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    font-family:'DM Sans',sans-serif;
+    color:#fff;min-height:100vh;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+}
+
+::selection{background:rgba(100,200,190,0.3)}
+
+/* ═══════ BACKGROUND ═══════ */
+.bg{
+    position:fixed;inset:0;z-index:0;
+    background:url('bg-tropical.png') center/cover no-repeat;
+    filter:blur(12px);
+    transform:scale(1.08);
+}
+
+/* Warm overlay for depth */
+.bg-overlay{
+    position:fixed;inset:0;z-index:1;
+    background:
+        radial-gradient(ellipse at 50% 40%,transparent 30%,rgba(0,0,0,0.15) 100%),
+        linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.12) 100%);
+}
+
+/* ═══════ CONTENT ═══════ */
+.content{position:relative;z-index:10;min-height:100vh;padding:0 32px 60px}
+
+/* ═══════ NAV ═══════ */
+.nav{
+    max-width:1200px;margin:0 auto;
+    padding:16px 0 0;position:relative;
+}
+
+.nav__bar{
+    display:flex;align-items:center;
+    padding:8px 16px;border-radius:18px;
+    background:rgba(255,255,255,0.18);
+    backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+    border:1px solid rgba(255,255,255,0.3);
+    box-shadow:0 4px 24px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.nav__left,.nav__right{display:flex;gap:4px;align-items:center;flex:1}
+.nav__left{justify-content:flex-start}
+.nav__right{justify-content:flex-end}
+
+.nav__link{
+    font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);
+    text-decoration:none;padding:8px 18px;border-radius:12px;
+    transition:all 0.25s;text-shadow:0 1px 3px rgba(0,0,0,0.1);
+    white-space:nowrap;
+}
+
+.nav__link:hover{background:rgba(255,255,255,0.12)}
+
+.nav__link--active{
+    background:rgba(255,255,255,0.22);
+    box-shadow:0 2px 8px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.25);
+    color:#fff;font-weight:600;
+}
+
+.nav__center{
+    position:absolute;left:50%;top:-20px;transform:translateX(-50%);
+    display:flex;flex-direction:column;align-items:center;z-index:5;
+}
+
+.nav__logo{
+    width:120px;height:120px;object-fit:contain;
+    filter:drop-shadow(0 6px 20px rgba(0,0,0,0.15));
+    border-radius:50%;
+    transition:transform 0.4s ease;
+}
+
+.nav__logo:hover{transform:scale(1.05)}
+
+.nav__brand-name{
+    font-family:'Pacifico',cursive;font-size:15px;
+    color:rgba(180,150,70,0.95);
+    margin-top:-2px;
+    text-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+.nav__icons{display:flex;gap:6px;margin-left:4px}
+
+.nav__icon{
+    width:38px;height:38px;border-radius:11px;
+    display:flex;align-items:center;justify-content:center;
+    color:rgba(255,255,255,0.65);cursor:pointer;
+    transition:all 0.25s;
+}
+
+.nav__icon:hover{background:rgba(255,255,255,0.12);color:#fff}
+
+/* ═══════ HERO ═══════ */
+.hero{
+    max-width:1200px;margin:64px auto 28px;
+    padding:52px 56px;text-align:center;
+    border-radius:24px;
+    background:rgba(255,255,255,0.14);
+    backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+    border:1px solid rgba(255,255,255,0.28);
+    box-shadow:0 8px 40px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.3);
+    position:relative;overflow:hidden;
+}
+
+/* Subtle shimmer */
+.hero::before{
+    content:'';position:absolute;top:-50%;left:-50%;
+    width:200%;height:200%;
+    background:conic-gradient(from 0deg at 50% 50%,transparent 0deg,rgba(255,255,255,0.03) 90deg,transparent 180deg);
+    animation:shimmer 12s linear infinite;pointer-events:none;
+}
+
+@keyframes shimmer{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+
+.hero__title{
+    font-family:'Playfair Display',serif;
+    font-size:38px;font-weight:600;
+    color:#fff;margin-bottom:24px;
+    text-shadow:0 2px 12px rgba(0,0,0,0.12);
+    line-height:1.3;position:relative;
+}
+
+.hero__title span{
+    background:linear-gradient(135deg,#fff,#ffe8b8);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;
+}
+
+.hero__cta{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:14px 40px;border-radius:16px;
+    background:linear-gradient(135deg,rgba(90,195,185,0.5),rgba(70,175,165,0.35));
+    border:1px solid rgba(255,255,255,0.3);
+    color:#fff;font-size:15px;font-weight:600;
+    text-decoration:none;cursor:pointer;
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    transition:all 0.35s cubic-bezier(0.16,1,0.3,1);
+    letter-spacing:0.03em;position:relative;
+    box-shadow:0 4px 16px rgba(80,180,170,0.15);
+}
+
+.hero__cta:hover{
+    background:linear-gradient(135deg,rgba(90,195,185,0.65),rgba(70,175,165,0.5));
+    transform:translateY(-2px);
+    box-shadow:0 8px 28px rgba(80,180,170,0.25);
+}
+
+/* ═══════ SECTIONS ═══════ */
+.sections{
+    max-width:1200px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.section-card{
+    border-radius:24px;padding:28px 24px;
+    background:rgba(255,255,255,0.14);
+    backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+    border:1px solid rgba(255,255,255,0.25);
+    box-shadow:0 8px 36px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.25);
+    display:flex;flex-direction:column;
+    transition:transform 0.4s cubic-bezier(0.16,1,0.3,1),box-shadow 0.4s;
+}
+
+.section-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 16px 48px rgba(0,0,0,0.1),inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.section-card__title{
+    font-family:'Playfair Display',serif;
+    font-size:22px;font-weight:600;
+    color:#fff;margin-bottom:18px;
+    text-shadow:0 1px 6px rgba(0,0,0,0.08);
+}
+
+.section-card__products{
+    display:grid;grid-template-columns:1fr 1fr;gap:12px;
+    margin-bottom:20px;flex:1;
+}
+
+.product-thumb{
+    border-radius:16px;overflow:hidden;
+    background:rgba(255,255,255,0.1);
+    border:1px solid rgba(255,255,255,0.18);
+    transition:all 0.3s ease;
+    cursor:pointer;
+}
+
+.product-thumb:hover{
+    transform:translateY(-2px);
+    background:rgba(255,255,255,0.15);
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+.product-thumb__img{
+    width:100%;aspect-ratio:1;
+    background:linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));
+    display:flex;align-items:center;justify-content:center;
+    font-size:44px;
+    position:relative;overflow:hidden;
+}
+
+/* Subtle glass reflection on product images */
+.product-thumb__img::after{
+    content:'';position:absolute;
+    top:-50%;left:-50%;width:200%;height:200%;
+    background:linear-gradient(135deg,rgba(255,255,255,0.08) 0%,transparent 50%);
+    pointer-events:none;
+}
+
+.product-thumb__info{padding:10px 12px 12px}
+
+.product-thumb__name{
+    font-size:12px;font-weight:400;color:rgba(255,255,255,0.7);
+    line-height:1.45;margin-bottom:4px;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+
+.product-thumb__price{
+    font-size:13px;font-weight:600;
+    background:linear-gradient(135deg,#fff,#ffe0a0);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;
+}
+
+.section-card__cta{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:10px 28px;border-radius:13px;
+    background:linear-gradient(135deg,rgba(90,195,185,0.4),rgba(70,175,165,0.28));
+    border:1px solid rgba(255,255,255,0.22);
+    color:#fff;font-size:13px;font-weight:500;
+    text-decoration:none;cursor:pointer;
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    transition:all 0.3s;align-self:flex-start;
+    box-shadow:0 2px 10px rgba(80,180,170,0.1);
+}
+
+.section-card__cta:hover{
+    background:linear-gradient(135deg,rgba(90,195,185,0.55),rgba(70,175,165,0.4));
+    transform:translateY(-1px);
+    box-shadow:0 6px 18px rgba(80,180,170,0.18);
+}
+
+.section-card__cta svg{transition:transform 0.3s}
+.section-card__cta:hover svg{transform:translateX(3px)}
+
+/* ═══════ FOOTER ═══════ */
+.footer{
+    max-width:1200px;margin:40px auto 0;
+    padding:20px 0;
+    border-top:1px solid rgba(255,255,255,0.12);
+    display:flex;justify-content:space-between;align-items:center;
+}
+
+.footer__text{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:0.03em}
+
+.footer__socials{display:flex;gap:8px}
+
+.footer__social{
+    width:32px;height:32px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);
+    color:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.25s;text-decoration:none;
+}
+
+.footer__social:hover{
+    background:rgba(255,255,255,0.14);color:rgba(255,255,255,0.8);
+}
+
+/* ═══════ ANIMATIONS ═══════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+.nav__bar{animation:fadeUp 0.6s ease 0.1s both}
+.hero{animation:fadeUp 0.7s ease 0.2s both}
+.section-card:nth-child(1){animation:fadeUp 0.6s ease 0.35s both}
+.section-card:nth-child(2){animation:fadeUp 0.6s ease 0.45s both}
+.section-card:nth-child(3){animation:fadeUp 0.6s ease 0.55s both}
+.footer{animation:fadeUp 0.5s ease 0.65s both}
+
+/* ═══════ RESPONSIVE ═══════ */
+@media(max-width:900px){
+    .content{padding:0 20px 40px}
+    .sections{grid-template-columns:1fr;gap:16px}
+    .hero__title{font-size:28px}
+    .hero{margin-top:80px;padding:36px 28px}
+    .nav__link{font-size:12px;padding:6px 12px}
+}
+
+@media(max-width:600px){
+    .content{padding:0 12px 30px}
+    .nav__bar{flex-wrap:wrap;justify-content:center;gap:4px;padding:10px 12px}
+    .nav__left,.nav__right{flex:auto;justify-content:center}
+    .nav__center{position:relative;left:auto;top:auto;transform:none;order:-1;width:100%;margin-bottom:8px}
+    .nav__logo{width:80px;height:80px}
+    .hero__title{font-size:22px}
+    .hero{margin-top:16px;padding:28px 20px}
+    .section-card{padding:20px 16px}
+    .section-card__title{font-size:18px}
+    .footer{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg"></div>
+<div class="bg-overlay"></div>
+
+<div class="content">
+
+    <!-- NAV -->
+    <nav class="nav">
+        <div class="nav__bar">
+            <div class="nav__left">
+                <a href="#" class="nav__link nav__link--active">Accueil</a>
+                <a href="#" class="nav__link">Boutique</a>
+                <a href="#" class="nav__link">À Propos</a>
+            </div>
+            <div class="nav__center">
+                <img src="logo-kaledoshop.png" alt="Kaledoshop" class="nav__logo">
+            </div>
+            <div class="nav__right">
+                <a href="#" class="nav__link">Orders</a>
+                <a href="#" class="nav__link">Contact</a>
+                <div class="nav__icons">
+                    <div class="nav__icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></div>
+                    <div class="nav__icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1 class="hero__title"><span>Bienvenue sur Kaledoshop — Votre Escale Tropicale</span></h1>
+        <a href="#" class="hero__cta">
+            Découvrir la boutique
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+    </div>
+
+    <!-- 3 CARDS -->
+    <div class="sections">
+
+        <div class="section-card">
+            <h2 class="section-card__title">Produits Phares</h2>
+            <div class="section-card__products">
+                <div class="product-thumb">
+                    <div class="product-thumb__img">🌀</div>
+                    <div class="product-thumb__info">
+                        <p class="product-thumb__name">Ventilateur colonne silencieux 3 vitesses</p>
+                        <p class="product-thumb__price">8 990 XPF</p>
+                    </div>
+                </div>
+                <div class="product-thumb">
+                    <div class="product-thumb__img">🗄️</div>
+                    <div class="product-thumb__info">
+                        <p class="product-thumb__name">Organisateur bambou multi-usage tiroir</p>
+                        <p class="product-thumb__price">4 290 XPF</p>
+                    </div>
+                </div>
+            </div>
+            <a href="#" class="section-card__cta">
+                Voir tout
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </a>
+        </div>
+
+        <div class="section-card">
+            <h2 class="section-card__title">Nouveautés</h2>
+            <div class="section-card__products">
+                <div class="product-thumb">
+                    <div class="product-thumb__img">💡</div>
+                    <div class="product-thumb__info">
+                        <p class="product-thumb__name">Lampe LED solaire anti-moustiques rechargeable</p>
+                        <p class="product-thumb__price">3 990 XPF</p>
+                    </div>
+                </div>
+                <div class="product-thumb">
+                    <div class="product-thumb__img">🔌</div>
+                    <div class="product-thumb__info">
+                        <p class="product-thumb__name">Multiprise parafoudre 6 ports USB-C compacte</p>
+                        <p class="product-thumb__price">4 950 XPF</p>
+                    </div>
+                </div>
+            </div>
+            <a href="#" class="section-card__cta">
+                Voir tout
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </a>
+        </div>
+
+        <div class="section-card">
+            <h2 class="section-card__title">Promotions</h2>
+            <div class="section-card__products">
+                <div class="product-thumb">
+                    <div class="product-thumb__img">🍳</div>
+                    <div class="product-thumb__info">
+                        <p class="product-thumb__name">Poêle céramique anti-adhésive 28cm sans PFOA</p>
+                        <p class="product-thumb__price">2 990 XPF</p>
+                    </div>
+                </div>
+                <div class="product-thumb">
+                    <div class="product-thumb__img">💧</div>
+                    <div class="product-thumb__info">
+                        <p class="product-thumb__name">Tuyau d'arrosage extensible 15m + pistolet</p>
+                        <p class="product-thumb__price">3 490 XPF</p>
+                    </div>
+                </div>
+            </div>
+            <a href="#" class="section-card__cta">
+                Voir tout
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <span class="footer__text">© 2026 Kaledoshop — Nouméa, Nouvelle-Calédonie</span>
+        <div class="footer__socials">
+            <a href="#" class="footer__social"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3V2z"/></svg></a>
+            <a href="#" class="footer__social"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" class="footer__social"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 001.94-2A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98" fill="#0c0a08"/></svg></a>
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>
