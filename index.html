@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kaledoshop — L’esprit calédonien chez vous</title>
+
+  <style>
+    :root {
+      --gold: #a98b45;
+      --gold-light: #c8b47a;
+      --text: #222222;
+      --muted: #666666;
+      --border: #c7bd9d;
+      --bg: #ffffff;
+      --soft-bg: #faf8f2;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .top-header {
+      padding: 28px 20px 0;
+      text-align: center;
+      background: #fff;
+    }
+
+    .logo-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .logo {
+      width: 150px;
+      max-width: 40vw;
+    }
+
+    .brand-name {
+      font-family: Georgia, serif;
+      color: var(--gold);
+      font-size: 34px;
+      font-style: italic;
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1;
+      display: none;
+    }
+
+    .tagline {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 14px 0 30px;
+      color: #222;
+    }
+
+    .divider {
+      width: min(920px, 86vw);
+      height: 1px;
+      background: var(--border);
+      margin: 0 auto;
+    }
+
+    .navbar {
+      width: min(920px, 86vw);
+      margin: 0 auto;
+      height: 56px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      border-bottom: 1px solid transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 42px;
+      font-size: 14px;
+      text-transform: uppercase;
+      color: #252525;
+    }
+
+    .nav-links a:first-child {
+      color: var(--gold);
+    }
+
+    .search-btn {
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--gold);
+      cursor: pointer;
+    }
+
+    .hero {
+      width: 100%;
+      height: 305px;
+      background-image: url("images/hero-nouvelle-caledonie.jpg");
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    .shop-section {
+      padding: 44px 20px 68px;
+      background: #fff;
+    }
+
+    .products {
+      width: min(930px, 92vw);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .product-card {
+      min-height: 245px;
+      border: 1px solid var(--border);
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 22px 18px 18px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+    }
+
+    .product-title {
+      font-size: 18px;
+      font-weight: 400;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 12px;
+      white-space: nowrap;
+    }
+
+    .product-image {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      display: block;
+      margin-bottom: 14px;
+    }
+
+    .price {
+      font-size: 16px;
+      color: #333;
+    }
+
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 20px;
+    }
+
+    .footer-inner {
+      width: min(930px, 92vw);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .socials {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .social-icon {
+      width: 21px;
+      height: 21px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+    }
+
+    .mobile-menu {
+      display: none;
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-size: 13px;
+      background: transparent;
+    }
+
+    @media (max-width: 850px) {
+      .navbar {
+        width: 92vw;
+        grid-template-columns: auto auto;
+        justify-content: space-between;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .hero {
+        height: 230px;
+      }
+
+      .products {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+      }
+
+      .product-title {
+        white-space: normal;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .top-header {
+        padding-top: 20px;
+      }
+
+      .logo {
+        width: 125px;
+      }
+
+      .tagline {
+        font-size: 12px;
+        margin-bottom: 24px;
+      }
+
+      .hero {
+        height: 190px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="top-header">
+    <div class="logo-wrap">
+      <!-- Remplace ce fichier par ton logo Kaledoshop -->
+      <img class="logo" src="images/logo-kaledoshop.png" alt="Logo Kaledoshop" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+      <div class="brand-name">Kaledoshop</div>
+    </div>
+
+    <p class="tagline">L’esprit calédonien chez vous</p>
+
+    <div class="divider"></div>
+
+    <nav class="navbar" aria-label="Navigation principale">
+      <button class="mobile-menu" type="button">Menu</button>
+
+      <div class="nav-links">
+        <a href="#boutique">Boutique</a>
+        <a href="#apropos">À propos</a>
+        <a href="#contact">Contact</a>
+        <a href="#panier">Panier (0)</a>
+      </div>
+
+      <a class="search-btn" href="#recherche" aria-label="Rechercher">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M16.2 16.2 21 21" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-label="Paysage de Nouvelle-Calédonie"></section>
+
+    <section class="shop-section" id="boutique">
+      <div class="products">
+        <article class="product-card">
+          <h2 class="product-title">Artisanat local</h2>
+          <img class="product-image" src="images/artisanat-local.jpg" alt="Artisanat local calédonien" />
+          <p class="price">188,00 €</p>
+        </article>
+
+        <article class="product-card">
+          <h2 class="product-title">Produits du terroir</h2>
+          <img class="product-image" src="images/produits-terroir.jpg" alt="Produits du terroir" />
+          <p class="price">89,00 €</p>
+        </article>
+
+        <article class="product-card">
+          <h2 class="product-title">Bijoux & accessoires</h2>
+          <img class="product-image" src="images/bijoux-accessoires.jpg" alt="Bijoux et accessoires" />
+          <p class="price">45,00 €</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="contact">
+    <div class="footer-inner">
+      <p>© 2024 Kaledoshop</p>
+
+      <div class="socials" aria-label="Réseaux sociaux">
+        <a class="social-icon" href="#" aria-label="Instagram">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/>
+            <circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/>
+          </svg>
+        </a>
+
+        <a class="social-icon" href="#" aria-label="Facebook">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M22 12a10 10 0 1 0-11.6 9.9v-7h-2.5V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.5v2h2.7l-.4 2.9h-2.3v7A10 10 0 0 0 22 12Z"/>
+          </svg>
+        </a>
+
+        <a class="social-icon" href="#" aria-label="YouTube">
+          <svg width="24" height="18" viewBox="0 0 24 18" fill="currentColor" aria-hidden="true">
+            <path d="M23.5 3.1A3 3 0 0 0 21.4 1C19.5.5 12 .5 12 .5S4.5.5 2.6 1A3 3 0 0 0 .5 3.1 31.4 31.4 0 0 0 0 9a31.4 31.4 0 0 0 .5 5.9A3 3 0 0 0 2.6 17c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.4 31.4 0 0 0 24 9a31.4 31.4 0 0 0-.5-5.9ZM9.6 12.6V5.4L15.8 9l-6.2 3.6Z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
