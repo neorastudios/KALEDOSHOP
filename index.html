@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kaledoshop</title>
+<title>Kaledoshop — Votre Escale Tropicale</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap');
 
@@ -22,7 +22,7 @@ body{
 .bg{
     position:fixed;inset:0;z-index:0;
     background:url('bg-tropical.png') center/cover no-repeat;
-    filter:blur(4px);
+    filter:blur(6px);
     transform:scale(1.04);
 }
 
@@ -40,7 +40,7 @@ body{
 /* ═══════ NAV ═══════ */
 .nav{
     max-width:1200px;margin:0 auto;
-    padding:16px 0 0;position:relative;
+    padding:40px 0 0;position:relative;
 }
 
 .nav__bar{
@@ -50,6 +50,8 @@ body{
     backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
     border:1px solid rgba(255,255,255,0.3);
     box-shadow:0 4px 24px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.3);
+    min-height:48px;
+    position:relative;
 }
 
 .nav__left,.nav__right{display:flex;gap:4px;align-items:center;flex:1}
@@ -72,12 +74,12 @@ body{
 }
 
 .nav__center{
-    position:absolute;left:50%;top:-20px;transform:translateX(-50%);
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
     display:flex;flex-direction:column;align-items:center;z-index:5;
 }
 
 .nav__logo{
-    width:150px;height:150px;object-fit:contain;
+    width:120px;height:120px;object-fit:contain;
     filter:drop-shadow(0 6px 20px rgba(0,0,0,0.15));
     border-radius:50%;
     transition:transform 0.4s ease;
@@ -105,7 +107,7 @@ body{
 
 /* ═══════ HERO ═══════ */
 .hero{
-    max-width:1200px;margin:64px auto 28px;
+    max-width:1200px;margin:80px auto 28px;
     padding:52px 56px;text-align:center;
     border-radius:24px;
     background:rgba(255,255,255,0.14);
@@ -327,7 +329,7 @@ body{
     <nav class="nav">
         <div class="nav__bar">
             <div class="nav__left">
-                <a href="#" class="nav__link">Accueil</a>
+                <a href="#" class="nav__link nav__link--active">Accueil</a>
                 <a href="#" class="nav__link">Boutique</a>
                 <a href="#" class="nav__link">À Propos</a>
             </div>
