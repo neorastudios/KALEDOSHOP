@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaledoshop — Boutique</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    font-family:'DM Sans',sans-serif;
+    color:#fff;min-height:100vh;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+}
+
+::selection{background:rgba(100,200,190,0.3)}
+
+/* ═══════ BACKGROUND ═══════ */
+.bg{
+    position:fixed;inset:0;z-index:0;
+    background:url('bg-tropical.png') center/cover no-repeat;
+    filter:blur(6px);
+    transform:scale(1.04);
+}
+
+.bg-overlay{
+    position:fixed;inset:0;z-index:1;
+    background:
+        radial-gradient(ellipse at 50% 40%,transparent 30%,rgba(0,0,0,0.15) 100%),
+        linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.12) 100%);
+}
+
+/* ═══════ CONTENT ═══════ */
+.content{position:relative;z-index:10;min-height:100vh;padding:0 32px 60px}
+
+/* ═══════ NAV (identique à index) ═══════ */
+.nav{
+    max-width:1200px;margin:0 auto;
+    padding:40px 0 0;position:relative;
+}
+
+.nav__bar{
+    display:flex;align-items:center;
+    padding:8px 16px;border-radius:18px;
+    background:rgba(255,255,255,0.18);
+    backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+    border:1px solid rgba(255,255,255,0.3);
+    box-shadow:0 4px 24px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.3);
+    min-height:48px;
+    position:relative;
+}
+
+.nav__left,.nav__right{display:flex;gap:4px;align-items:center;flex:1}
+.nav__left{justify-content:flex-start}
+.nav__right{justify-content:flex-end}
+
+.nav__link{
+    font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);
+    text-decoration:none;padding:8px 18px;border-radius:12px;
+    transition:all 0.25s;text-shadow:0 1px 3px rgba(0,0,0,0.1);
+    white-space:nowrap;
+}
+
+.nav__link:hover{background:rgba(255,255,255,0.12)}
+
+.nav__link--active{
+    background:rgba(255,255,255,0.22);
+    box-shadow:0 2px 8px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.25);
+    color:#fff;font-weight:600;
+}
+
+.nav__center{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    display:flex;flex-direction:column;align-items:center;z-index:5;
+}
+
+.nav__logo{
+    width:150px;height:150px;object-fit:contain;
+    filter:drop-shadow(0 4px 12px rgba(0,0,0,0.35)) drop-shadow(0 8px 30px rgba(0,0,0,0.2));
+    border-radius:50%;
+    transition:transform 0.4s ease;
+}
+
+.nav__logo:hover{transform:scale(1.05)}
+
+.nav__icons{display:flex;gap:6px;margin-left:4px}
+
+.nav__icon{
+    width:38px;height:38px;border-radius:11px;
+    display:flex;align-items:center;justify-content:center;
+    color:rgba(255,255,255,0.65);cursor:pointer;
+    transition:all 0.25s;
+}
+
+.nav__icon:hover{background:rgba(255,255,255,0.12);color:#fff}
+
+/* ═══════ PAGE HEADER ═══════ */
+.page-header{
+    max-width:1200px;margin:80px auto 24px;
+    padding:36px 40px;text-align:center;
+    border-radius:24px;
+    background:rgba(255,255,255,0.14);
+    backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+    border:1px solid rgba(255,255,255,0.28);
+    box-shadow:0 8px 40px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.3);
+    position:relative;overflow:hidden;
+}
+
+.page-header::before{
+    content:'';position:absolute;top:-50%;left:-50%;
+    width:200%;height:200%;
+    background:conic-gradient(from 0deg at 50% 50%,transparent 0deg,rgba(255,255,255,0.03) 90deg,transparent 180deg);
+    animation:shimmer 12s linear infinite;pointer-events:none;
+}
+
+@keyframes shimmer{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+
+.page-header__title{
+    font-size:32px;font-weight:700;
+    color:#fff;margin-bottom:8px;
+    text-shadow:0 2px 8px rgba(0,0,0,0.35),0 4px 20px rgba(0,0,0,0.15);
+    position:relative;
+}
+
+.page-header__sub{
+    font-size:14px;font-weight:300;
+    color:rgba(255,255,255,0.6);
+    position:relative;
+}
+
+/* ═══════ TOOLBAR (search + filters) ═══════ */
+.toolbar{
+    max-width:1200px;margin:0 auto 24px;
+    display:flex;gap:16px;align-items:center;
+    flex-wrap:wrap;
+}
+
+/* Search */
+.search{
+    flex:1;min-width:200px;position:relative;
+}
+
+.search__input{
+    width:100%;padding:12px 16px 12px 44px;
+    border-radius:14px;border:1px solid rgba(255,255,255,0.2);
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;
+    outline:none;transition:all 0.3s;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+.search__input::placeholder{color:rgba(255,255,255,0.4)}
+
+.search__input:focus{
+    border-color:rgba(90,195,185,0.4);
+    background:rgba(255,255,255,0.16);
+    box-shadow:0 0 0 3px rgba(90,195,185,0.1),inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+.search__icon{
+    position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    color:rgba(255,255,255,0.4);pointer-events:none;
+}
+
+/* Filters */
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+
+.filter-btn{
+    padding:8px 20px;border-radius:12px;
+    border:1px solid rgba(255,255,255,0.15);
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;
+    cursor:pointer;transition:all 0.25s;
+    font-family:'DM Sans',sans-serif;
+}
+
+.filter-btn:hover{
+    background:rgba(255,255,255,0.14);
+    color:#fff;
+}
+
+.filter-btn--active{
+    background:linear-gradient(135deg,rgba(90,195,185,0.4),rgba(70,175,165,0.28));
+    border-color:rgba(90,195,185,0.3);
+    color:#fff;font-weight:600;
+    box-shadow:0 2px 10px rgba(80,180,170,0.12);
+}
+
+/* ═══════ PRODUCT GRID ═══════ */
+.products-grid{
+    max-width:1200px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+
+/* ── Product Card ── */
+.product-card{
+    border-radius:20px;overflow:hidden;
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+    border:1px solid rgba(255,255,255,0.2);
+    box-shadow:0 6px 28px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.2);
+    transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
+    cursor:pointer;
+    display:flex;flex-direction:column;
+}
+
+.product-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 14px 44px rgba(0,0,0,0.1),inset 0 1px 0 rgba(255,255,255,0.3);
+    border-color:rgba(255,255,255,0.3);
+}
+
+.product-card__img{
+    width:100%;aspect-ratio:1;
+    background:rgba(255,255,255,0.06);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;
+}
+
+.product-card__img::after{
+    content:'';position:absolute;
+    top:-50%;left:-50%;width:200%;height:200%;
+    background:linear-gradient(135deg,rgba(255,255,255,0.06) 0%,transparent 50%);
+    pointer-events:none;
+}
+
+/* Placeholder icon for empty products */
+.product-card__placeholder{
+    font-size:36px;opacity:0.25;
+}
+
+/* Tag (Nouveau, Promo, etc.) */
+.product-card__tag{
+    position:absolute;top:10px;left:10px;
+    padding:4px 12px;border-radius:8px;
+    font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+
+.product-card__tag--new{
+    background:rgba(90,195,185,0.25);border:1px solid rgba(90,195,185,0.3);
+    color:rgba(180,255,245,0.9);
+}
+
+.product-card__tag--promo{
+    background:rgba(220,80,80,0.25);border:1px solid rgba(220,80,80,0.3);
+    color:rgba(255,180,180,0.9);
+}
+
+.product-card__tag--best{
+    background:rgba(220,180,80,0.25);border:1px solid rgba(220,180,80,0.3);
+    color:rgba(255,230,160,0.9);
+}
+
+/* Add to cart button */
+.product-card__add{
+    position:absolute;bottom:10px;left:50%;
+    transform:translateX(-50%) translateY(8px);
+    opacity:0;
+    padding:8px 22px;border-radius:10px;
+    background:linear-gradient(135deg,rgba(90,195,185,0.5),rgba(70,175,165,0.35));
+    border:1px solid rgba(255,255,255,0.25);
+    color:#fff;font-size:11px;font-weight:600;letter-spacing:0.03em;
+    cursor:pointer;white-space:nowrap;
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    transition:all 0.3s ease;
+    font-family:'DM Sans',sans-serif;
+}
+
+.product-card:hover .product-card__add{
+    opacity:1;transform:translateX(-50%) translateY(0);
+}
+
+.product-card__add:hover{
+    background:linear-gradient(135deg,rgba(90,195,185,0.65),rgba(70,175,165,0.5));
+}
+
+.product-card__info{padding:14px 16px 18px}
+
+.product-card__cat{
+    font-size:11px;font-weight:400;
+    color:rgba(255,255,255,0.4);margin-bottom:4px;
+}
+
+.product-card__name{
+    font-size:14px;font-weight:500;
+    color:rgba(255,255,255,0.9);margin-bottom:6px;
+    line-height:1.4;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+
+.product-card__prices{display:flex;align-items:center;gap:8px}
+
+.product-card__price{
+    font-size:15px;font-weight:600;
+    background:linear-gradient(135deg,#fff,#ffe0a0);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;
+}
+
+.product-card__old-price{
+    font-size:12px;color:rgba(255,255,255,0.35);
+    text-decoration:line-through;
+}
+
+/* ═══════ EMPTY STATE ═══════ */
+.empty-state{
+    max-width:1200px;margin:0 auto;
+    padding:80px 40px;text-align:center;
+    border-radius:24px;
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+    border:1px solid rgba(255,255,255,0.18);
+    box-shadow:0 8px 36px rgba(0,0,0,0.06);
+    display:none;
+}
+
+.empty-state--visible{display:block}
+
+.empty-state__icon{font-size:56px;margin-bottom:16px;opacity:0.6}
+
+.empty-state__title{
+    font-size:20px;font-weight:600;color:rgba(255,255,255,0.8);
+    margin-bottom:8px;
+}
+
+.empty-state__sub{
+    font-size:14px;font-weight:300;color:rgba(255,255,255,0.4);
+    max-width:400px;margin:0 auto;line-height:1.6;
+}
+
+/* ═══════ PAGINATION ═══════ */
+.pagination{
+    max-width:1200px;margin:32px auto 0;
+    display:flex;justify-content:center;gap:6px;
+}
+
+.pagination__btn{
+    width:38px;height:38px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);
+    color:rgba(255,255,255,0.5);font-size:13px;font-weight:500;
+    cursor:pointer;transition:all 0.25s;
+    font-family:'DM Sans',sans-serif;
+}
+
+.pagination__btn:hover{
+    background:rgba(255,255,255,0.14);color:#fff;
+}
+
+.pagination__btn--active{
+    background:linear-gradient(135deg,rgba(90,195,185,0.4),rgba(70,175,165,0.28));
+    border-color:rgba(90,195,185,0.3);
+    color:#fff;font-weight:600;
+}
+
+/* ═══════ FOOTER ═══════ */
+.footer{
+    max-width:1200px;margin:40px auto 0;
+    padding:20px 0;
+    border-top:1px solid rgba(255,255,255,0.12);
+    display:flex;justify-content:space-between;align-items:center;
+}
+
+.footer__text{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:0.03em}
+
+.footer__socials{display:flex;gap:8px}
+
+.footer__social{
+    width:32px;height:32px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);
+    color:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.25s;text-decoration:none;
+}
+
+.footer__social:hover{
+    background:rgba(255,255,255,0.14);color:rgba(255,255,255,0.8);
+}
+
+/* ═══════ ANIMATIONS ═══════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+.nav__bar{animation:fadeUp 0.6s ease 0.1s both}
+.page-header{animation:fadeUp 0.7s ease 0.2s both}
+.toolbar{animation:fadeUp 0.6s ease 0.3s both}
+.products-grid{animation:fadeUp 0.6s ease 0.4s both}
+.empty-state{animation:fadeUp 0.6s ease 0.4s both}
+.footer{animation:fadeUp 0.5s ease 0.5s both}
+
+/* ═══════ RESPONSIVE ═══════ */
+@media(max-width:900px){
+    .content{padding:0 20px 40px}
+    .products-grid{grid-template-columns:repeat(2,1fr)}
+    .page-header__title{font-size:24px}
+    .page-header{margin-top:80px;padding:28px 24px}
+    .nav__link{font-size:12px;padding:6px 12px}
+    .toolbar{flex-direction:column}
+}
+
+@media(max-width:600px){
+    .content{padding:0 12px 30px}
+    .nav__bar{flex-wrap:wrap;justify-content:center;gap:4px;padding:10px 12px}
+    .nav__left,.nav__right{flex:auto;justify-content:center}
+    .nav__center{position:relative;left:auto;top:auto;transform:none;order:-1;width:100%;margin-bottom:8px}
+    .nav__logo{width:80px;height:80px}
+    .products-grid{grid-template-columns:1fr 1fr;gap:12px}
+    .page-header__title{font-size:20px}
+    .page-header{margin-top:16px;padding:24px 16px}
+    .filters{width:100%;justify-content:center}
+    .footer{flex-direction:column;gap:12px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg"></div>
+<div class="bg-overlay"></div>
+
+<div class="content">
+
+    <!-- NAV -->
+    <nav class="nav">
+        <div class="nav__bar">
+            <div class="nav__left">
+                <a href="index.html" class="nav__link">Accueil</a>
+                <a href="boutique.html" class="nav__link nav__link--active">Boutique</a>
+                <a href="#" class="nav__link">À Propos</a>
+            </div>
+            <div class="nav__center">
+                <a href="index.html"><img src="logo-kaledoshop.png" alt="Kaledoshop" class="nav__logo"></a>
+            </div>
+            <div class="nav__right">
+                <a href="#" class="nav__link">Orders</a>
+                <a href="#" class="nav__link">Contact</a>
+                <div class="nav__icons">
+                    <div class="nav__icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></div>
+                    <div class="nav__icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <h1 class="page-header__title">Boutique</h1>
+        <p class="page-header__sub">Tous nos produits pour améliorer votre quotidien sur le Caillou</p>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+        <div class="search">
+            <svg class="search__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" class="search__input" placeholder="Rechercher un produit...">
+        </div>
+        <div class="filters">
+            <button class="filter-btn filter-btn--active">Tout</button>
+            <button class="filter-btn">Maison</button>
+            <button class="filter-btn">Cuisine</button>
+            <button class="filter-btn">Électronique</button>
+            <button class="filter-btn">Jardin</button>
+        </div>
+    </div>
+
+    <!-- EMPTY STATE (visible par défaut, à cacher quand t'ajoutes des produits) -->
+    <div class="empty-state empty-state--visible" id="empty-state">
+        <div class="empty-state__icon">📦</div>
+        <h2 class="empty-state__title">Les produits arrivent bientôt !</h2>
+        <p class="empty-state__sub">Notre catalogue est en cours de préparation. Revenez très vite pour découvrir nos produits sélectionnés pour vous.</p>
+    </div>
+
+    <!-- PRODUCT GRID (caché par défaut, décommente pour ajouter des produits) -->
+    <!--
+    <div class="products-grid" id="products-grid">
+
+        <div class="product-card">
+            <div class="product-card__img">
+                <span class="product-card__placeholder">🌀</span>
+                <span class="product-card__tag product-card__tag--best">Best-seller</span>
+                <button class="product-card__add">Ajouter au panier</button>
+            </div>
+            <div class="product-card__info">
+                <p class="product-card__cat">Maison</p>
+                <p class="product-card__name">Ventilateur colonne silencieux 3 vitesses</p>
+                <div class="product-card__prices">
+                    <span class="product-card__price">8 990 XPF</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-card__img">
+                <span class="product-card__placeholder">💡</span>
+                <span class="product-card__tag product-card__tag--new">Nouveau</span>
+                <button class="product-card__add">Ajouter au panier</button>
+            </div>
+            <div class="product-card__info">
+                <p class="product-card__cat">Électronique</p>
+                <p class="product-card__name">Lampe LED solaire anti-moustiques</p>
+                <div class="product-card__prices">
+                    <span class="product-card__price">3 990 XPF</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="product-card__img">
+                <span class="product-card__placeholder">🍳</span>
+                <span class="product-card__tag product-card__tag--promo">Promo</span>
+                <button class="product-card__add">Ajouter au panier</button>
+            </div>
+            <div class="product-card__info">
+                <p class="product-card__cat">Cuisine</p>
+                <p class="product-card__name">Poêle céramique anti-adhésive 28cm</p>
+                <div class="product-card__prices">
+                    <span class="product-card__price">2 990 XPF</span>
+                    <span class="product-card__old-price">4 290 XPF</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="pagination">
+        <button class="pagination__btn pagination__btn--active">1</button>
+        <button class="pagination__btn">2</button>
+        <button class="pagination__btn">3</button>
+        <button class="pagination__btn">→</button>
+    </div>
+    -->
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <span class="footer__text">© 2026 Kaledoshop — Nouméa, Nouvelle-Calédonie</span>
+        <div class="footer__socials">
+            <a href="#" class="footer__social"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3V2z"/></svg></a>
+            <a href="#" class="footer__social"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" class="footer__social"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 001.94-2A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98" fill="#0c0a08"/></svg></a>
+        </div>
+    </footer>
+
+</div>
+
+<script>
+// ── Filter buttons ──
+const filterBtns = document.querySelectorAll('.filter-btn');
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('filter-btn--active'));
+        btn.classList.add('filter-btn--active');
+    });
+});
+</script>
+</body>
+</html>
