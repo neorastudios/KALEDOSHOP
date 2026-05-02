@@ -738,16 +738,39 @@ body{
 
 </div>
 
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+
 <script>
-// Contact form submit
 const form = document.getElementById('contact-form');
 const success = document.getElementById('form-success');
 
-form.addEventListener('submit', (e) => {
+form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    // TODO: Connecter à Firebase/EmailJS plus tard
-    form.style.display = 'none';
-    success.classList.add('form-success--visible');
+    const btn = form.querySelector('.form-btn');
+    btn.textContent = 'Envoi en cours...';
+    btn.disabled = true;
+
+    try {
+        await db.collection('contacts').add({
+            name: form.querySelector('input[type="text"]').value,
+            email: form.querySelector('input[type="email"]').value,
+            phone: form.querySelector('input[type="tel"]').value,
+            subject: form.querySelector('select').value,
+            message: form.querySelector('textarea').value,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            read: false
+        });
+        form.style.display = 'none';
+        success.classList.add('form-success--visible');
+    } catch (err) {
+        console.error('Erreur:', err);
+        btn.textContent = 'Erreur, réessayez';
+        btn.disabled = false;
+        setTimeout(() => { btn.textContent = 'Envoyer le message'; }, 2000);
+    }
 });
 </script>
 </body>

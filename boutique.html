@@ -513,7 +513,7 @@ body{
             </div>
             <div class="nav__right">
                 <a href="#" class="nav__link">Orders</a>
-                <a href="contact.html" class="nav__link">Contact</a>
+                <a href="#" class="nav__link">Contact</a>
                 <div class="nav__icons">
                     <div class="nav__icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></div>
                     <div class="nav__icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
@@ -543,72 +543,21 @@ body{
         </div>
     </div>
 
-    <!-- EMPTY STATE (visible par défaut, à cacher quand t'ajoutes des produits) -->
-    <div class="empty-state empty-state--visible" id="empty-state">
+    <!-- EMPTY STATE -->
+    <div class="empty-state" id="empty-state" style="display:none">
         <div class="empty-state__icon">📦</div>
         <h2 class="empty-state__title">Les produits arrivent bientôt !</h2>
         <p class="empty-state__sub">Notre catalogue est en cours de préparation. Revenez très vite pour découvrir nos produits sélectionnés pour vous.</p>
     </div>
 
-    <!-- PRODUCT GRID (caché par défaut, décommente pour ajouter des produits) -->
-    <!--
-    <div class="products-grid" id="products-grid">
-
-        <div class="product-card">
-            <div class="product-card__img">
-                <span class="product-card__placeholder">🌀</span>
-                <span class="product-card__tag product-card__tag--best">Best-seller</span>
-                <button class="product-card__add">Ajouter au panier</button>
-            </div>
-            <div class="product-card__info">
-                <p class="product-card__cat">Maison</p>
-                <p class="product-card__name">Ventilateur colonne silencieux 3 vitesses</p>
-                <div class="product-card__prices">
-                    <span class="product-card__price">8 990 XPF</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-card__img">
-                <span class="product-card__placeholder">💡</span>
-                <span class="product-card__tag product-card__tag--new">Nouveau</span>
-                <button class="product-card__add">Ajouter au panier</button>
-            </div>
-            <div class="product-card__info">
-                <p class="product-card__cat">Électronique</p>
-                <p class="product-card__name">Lampe LED solaire anti-moustiques</p>
-                <div class="product-card__prices">
-                    <span class="product-card__price">3 990 XPF</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="product-card__img">
-                <span class="product-card__placeholder">🍳</span>
-                <span class="product-card__tag product-card__tag--promo">Promo</span>
-                <button class="product-card__add">Ajouter au panier</button>
-            </div>
-            <div class="product-card__info">
-                <p class="product-card__cat">Cuisine</p>
-                <p class="product-card__name">Poêle céramique anti-adhésive 28cm</p>
-                <div class="product-card__prices">
-                    <span class="product-card__price">2 990 XPF</span>
-                    <span class="product-card__old-price">4 290 XPF</span>
-                </div>
-            </div>
-        </div>
-
+    <!-- LOADING -->
+    <div class="empty-state" id="loading-state" style="display:block">
+        <div class="empty-state__icon">⏳</div>
+        <h2 class="empty-state__title">Chargement des produits...</h2>
     </div>
 
-    <div class="pagination">
-        <button class="pagination__btn pagination__btn--active">1</button>
-        <button class="pagination__btn">2</button>
-        <button class="pagination__btn">3</button>
-        <button class="pagination__btn">→</button>
-    </div>
-    -->
+    <!-- PRODUCT GRID (rempli par Firebase) -->
+    <div class="products-grid" id="products-grid" style="display:none"></div>
 
     <!-- FOOTER -->
     <footer class="footer">
@@ -622,15 +571,121 @@ body{
 
 </div>
 
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+
 <script>
+// ── Format XPF ──
+function fmtXPF(v) { return Number(v).toLocaleString('fr-FR') + ' XPF'; }
+
 // ── Filter buttons ──
 const filterBtns = document.querySelectorAll('.filter-btn');
+let currentFilter = 'Tout';
+
 filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         filterBtns.forEach(b => b.classList.remove('filter-btn--active'));
         btn.classList.add('filter-btn--active');
+        currentFilter = btn.textContent.trim();
+        renderProducts(allProducts);
     });
 });
+
+// ── Search ──
+const searchInput = document.querySelector('.search__input');
+searchInput.addEventListener('input', () => renderProducts(allProducts));
+
+// ── Load products from Firestore ──
+let allProducts = [];
+
+async function loadProducts() {
+    try {
+        const snapshot = await db.collection('products').orderBy('createdAt', 'desc').get();
+        allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderProducts(allProducts);
+    } catch (err) {
+        console.error('Erreur chargement produits:', err);
+        document.getElementById('loading-state').style.display = 'none';
+        document.getElementById('empty-state').style.display = 'block';
+    }
+}
+
+function renderProducts(products) {
+    const grid = document.getElementById('products-grid');
+    const empty = document.getElementById('empty-state');
+    const loading = document.getElementById('loading-state');
+    const search = searchInput.value.toLowerCase();
+
+    loading.style.display = 'none';
+
+    // Filter
+    let filtered = products;
+    if (currentFilter !== 'Tout') {
+        filtered = filtered.filter(p => p.category === currentFilter);
+    }
+    if (search) {
+        filtered = filtered.filter(p => p.name.toLowerCase().includes(search));
+    }
+
+    if (filtered.length === 0) {
+        grid.style.display = 'none';
+        empty.style.display = 'block';
+        empty.querySelector('.empty-state__title').textContent = products.length === 0 ? 'Les produits arrivent bientôt !' : 'Aucun produit trouvé';
+        return;
+    }
+
+    empty.style.display = 'none';
+    grid.style.display = 'grid';
+
+    grid.innerHTML = filtered.map(p => {
+        const hasDiscount = p.oldPrice && p.oldPrice > p.price;
+        const discountPct = hasDiscount ? Math.round((1 - p.price / p.oldPrice) * 100) : 0;
+        const tagClass = p.tag === 'Nouveau' ? 'product-card__tag--new' : p.tag === 'Promo' ? 'product-card__tag--promo' : 'product-card__tag--best';
+        const imgContent = p.imageUrl 
+            ? `<img src="${p.imageUrl}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover">`
+            : `<span class="product-card__placeholder">${p.emoji || '📦'}</span>`;
+
+        return `
+            <div class="product-card">
+                <div class="product-card__img">
+                    ${imgContent}
+                    ${p.tag ? `<span class="product-card__tag ${tagClass}">${p.tag}</span>` : ''}
+                    ${hasDiscount ? `<span class="product-card__discount">-${discountPct}%</span>` : ''}
+                    <button class="product-card__add" onclick="addToCart('${p.id}')">Ajouter au panier</button>
+                </div>
+                <div class="product-card__info">
+                    <p class="product-card__cat">${p.category || ''}</p>
+                    <p class="product-card__name">${p.name}</p>
+                    <div class="product-card__prices">
+                        <span class="product-card__price ${hasDiscount ? 'product-card__price--promo' : ''}">${fmtXPF(p.price)}</span>
+                        ${hasDiscount ? `<span class="product-card__old-price">${fmtXPF(p.oldPrice)}</span>` : ''}
+                    </div>
+                </div>
+            </div>`;
+    }).join('');
+}
+
+// ── Cart (simple localStorage) ──
+function addToCart(productId) {
+    let cart = JSON.parse(localStorage.getItem('kaledoshop-cart') || '[]');
+    const product = allProducts.find(p => p.id === productId);
+    if (product) {
+        cart.push({ id: product.id, name: product.name, price: product.price, qty: 1 });
+        localStorage.setItem('kaledoshop-cart', JSON.stringify(cart));
+        // Visual feedback
+        event.target.textContent = '✓ Ajouté';
+        event.target.style.background = 'rgba(42,110,78,0.6)';
+        setTimeout(() => {
+            event.target.textContent = 'Ajouter au panier';
+            event.target.style.background = '';
+        }, 1200);
+    }
+}
+
+// ── Init ──
+loadProducts();
 </script>
 </body>
 </html>
