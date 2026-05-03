@@ -4,13 +4,12 @@
 ═══════════════════════════════════════ */
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCxxQqECMe_IO-5JjUSd8If6bNvIvaWPes",
-    authDomain: "kaledoshopnc.firebaseapp.com",
-    projectId: "kaledoshopnc",
-    storageBucket: "kaledoshopnc.firebasestorage.app",
-    messagingSenderId: "828687183789",
-    appId: "1:828687183789:web:7483fd74c62d6a8d007b24",
-    measurementId: "G-KMM84V5L9Q"
+    apiKey: "AIzaSyBcqNl50YN-pa0nr9dNQyTesVhA9O9ynrI",
+    authDomain: "kaledoshopweb.firebaseapp.com",
+    projectId: "kaledoshopweb",
+    storageBucket: "kaledoshopweb.firebasestorage.app",
+    messagingSenderId: "945907058215",
+    appId: "1:945907058215:web:946deef336ba8a6fae3002"
 };
 
 // Init Firebase
