@@ -15,10 +15,10 @@ const firebaseConfig = {
 // Init Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Services
+// Services — init seulement si le SDK est chargé
 const db = firebase.firestore();
-const auth = firebase.auth();
-const storage = firebase.storage();
+const auth = typeof firebase.auth === 'function' ? firebase.auth() : null;
+const storage = typeof firebase.storage === 'function' ? firebase.storage() : null;
 
 // Helper: format XPF
 function fmtXPF(price) {
