@@ -174,6 +174,10 @@ tr:hover{background:#fafaf8}
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script>
+const auth = firebase.auth();
+const storage = firebase.storage();
+</script>
+<script>
 const loginScreen=document.getElementById('login-screen'),adminPanel=document.getElementById('admin-panel'),loginBtn=document.getElementById('login-btn'),loginError=document.getElementById('login-error'),logoutBtn=document.getElementById('logout-btn');
 
 auth.onAuthStateChanged(u=>{if(u){loginScreen.style.display='none';adminPanel.classList.add('admin--visible');loadDashboard();loadProducts();loadContacts()}else{loginScreen.style.display='flex';adminPanel.classList.remove('admin--visible')}});
