@@ -669,7 +669,7 @@ function renderProducts(products) {
     // Filter
     let filtered = products;
     if (currentFilter !== 'Tout') {
-        filtered = filtered.filter(p => p.category === currentFilter);
+        filtered = filtered.filter(p => p.cat === currentFilter);
     }
     if (search) {
         filtered = filtered.filter(p => p.name.toLowerCase().includes(search));
@@ -702,7 +702,7 @@ function renderProducts(products) {
                     <button class="product-card__add" onclick="addToCart('${p.id}')">Ajouter au panier</button>
                 </div>
                 <div class="product-card__info">
-                    <p class="product-card__cat">${p.category || ''}</p>
+                    <p class="product-card__cat">${p.cat || ''}</p>
                     <p class="product-card__name">${p.name}</p>
                     <div class="product-card__prices">
                         <span class="product-card__price ${hasDiscount ? 'product-card__price--promo' : ''}">${fmtXPF(p.price)}</span>
