@@ -599,7 +599,7 @@ async function loadHomeProducts() {
         function renderThumbs(items) {
             return items.map(p => {
                 const imgContent = p.image 
-                    ? '<img src="' + p.image + '" style="width:100%;height:100%;object-fit:cover">' 
+                    ? '<img src="' + p.image + '" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1">' 
                     : '<span style="font-size:40px">' + (p.emoji || '📦') + '</span>';
                 return '<div class="product-thumb"><div class="product-thumb__img">' + imgContent + '</div><div class="product-thumb__info"><p class="product-thumb__name">' + p.name + '</p><p class="product-thumb__price">' + fmtXPF(p.price) + '</p></div></div>';
             }).join('');
