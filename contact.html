@@ -791,7 +791,7 @@ form.addEventListener('submit', async (e) => {
         await db.collection('contacts').add({
             name: form.querySelector('input[type="text"]').value,
             email: form.querySelector('input[type="email"]').value,
-            phone: form.querySelector('input[type="tel"]').value,
+            phone: form.querySelector('input[type="tel"]') ? form.querySelector('input[type="tel"]').value : null,
             subject: form.querySelector('select').value,
             message: form.querySelector('textarea').value,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
