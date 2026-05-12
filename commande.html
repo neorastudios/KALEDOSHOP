@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaledoshop — Commande</title>
+<link rel="icon" type="image/png" href="logo-kaledoshop.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:#fff;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(100,200,190,0.3)}
+
+.bg{position:fixed;inset:0;z-index:0;background:url('bg-tropical.png') center/cover no-repeat;filter:blur(6px);transform:scale(1.04)}
+.bg-overlay{position:fixed;inset:0;z-index:1;background:radial-gradient(ellipse at 50% 40%,transparent 30%,rgba(0,0,0,0.15) 100%),linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.12) 100%)}
+.content{position:relative;z-index:10;min-height:100vh;padding:0 32px 60px}
+
+/* NAV */
+.nav{max-width:1200px;margin:0 auto;padding:40px 0 0;position:relative}
+.nav__bar{display:flex;align-items:center;padding:8px 16px;border-radius:18px;background:rgba(255,255,255,0.18);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.3);box-shadow:0 4px 24px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.3);min-height:48px;position:relative}
+.nav__left,.nav__right{display:flex;gap:4px;align-items:center;flex:1}
+.nav__left{justify-content:flex-start}
+.nav__right{justify-content:flex-end}
+.nav__link{font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);text-decoration:none;padding:8px 18px;border-radius:12px;transition:all 0.25s;text-shadow:0 1px 3px rgba(0,0,0,0.1);white-space:nowrap}
+.nav__link:hover{background:rgba(255,255,255,0.12)}
+.nav__link--active{background:rgba(255,255,255,0.22);box-shadow:0 2px 8px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.25);color:#fff;font-weight:600}
+.nav__center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;z-index:5}
+.nav__logo{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.35)) drop-shadow(0 8px 30px rgba(0,0,0,0.2));border-radius:50%;transition:transform 0.4s ease}
+.nav__logo:hover{transform:scale(1.05)}
+.nav__icons{display:flex;gap:6px;margin-left:4px}
+.nav__icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.65);cursor:pointer;transition:all 0.25s}
+.nav__icon:hover{background:rgba(255,255,255,0.12);color:#fff}
+
+/* PAGE HEADER */
+.page-header{max-width:1200px;margin:80px auto 28px;padding:40px 56px;text-align:center;border-radius:24px;background:rgba(255,255,255,0.14);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,0.28);box-shadow:0 8px 40px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.3);position:relative;overflow:hidden}
+.page-header__title{font-size:28px;font-weight:700;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.35);position:relative}
+
+/* LAYOUT */
+.order-layout{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.2fr 0.8fr;gap:24px}
+
+/* GLASS CARD */
+.glass-card{border-radius:24px;padding:32px;background:rgba(255,255,255,0.12);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,0.22);box-shadow:0 8px 36px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.2)}
+.glass-card__title{font-size:20px;font-weight:700;color:#fff;margin-bottom:20px;text-shadow:0 1px 6px rgba(0,0,0,0.1)}
+
+/* FORM */
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:13px;font-weight:600;color:rgba(255,255,255,0.8);margin-bottom:6px}
+.form-input,.form-textarea,.form-select{width:100%;padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);color:#fff;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;transition:all 0.3s;box-shadow:inset 0 1px 0 rgba(255,255,255,0.1)}
+.form-input::placeholder,.form-textarea::placeholder{color:rgba(255,255,255,0.35)}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:rgba(90,195,185,0.4);background:rgba(255,255,255,0.12);box-shadow:0 0 0 3px rgba(90,195,185,0.1)}
+.form-textarea{min-height:80px;resize:vertical;line-height:1.6}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='rgba(255,255,255,0.5)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+.form-select option{background:#2a2520;color:#fff}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-hint{font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px;font-style:italic}
+
+.form-btn{display:inline-flex;align-items:center;gap:8px;padding:16px 36px;border-radius:14px;background:linear-gradient(135deg,rgba(90,195,185,0.5),rgba(70,175,165,0.35));border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:15px;font-weight:600;cursor:pointer;width:100%;justify-content:center;backdrop-filter:blur(12px);transition:all 0.35s;box-shadow:0 4px 16px rgba(80,180,170,0.15);font-family:'DM Sans',sans-serif;margin-top:8px}
+.form-btn:hover{background:linear-gradient(135deg,rgba(90,195,185,0.65),rgba(70,175,165,0.5));transform:translateY(-2px);box-shadow:0 8px 28px rgba(80,180,170,0.25)}
+.form-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.form-btn svg{transition:transform 0.3s}
+.form-btn:hover svg{transform:translateX(3px)}
+
+/* ORDER SUMMARY */
+.summary__items{margin-bottom:20px}
+.summary-item{display:flex;gap:12px;padding:12px;border-radius:14px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);margin-bottom:8px;align-items:center}
+.summary-item__img{width:56px;height:56px;border-radius:10px;object-fit:cover;background:rgba(255,255,255,0.08);flex-shrink:0}
+.summary-item__img--placeholder{display:flex;align-items:center;justify-content:center;font-size:24px}
+.summary-item__info{flex:1;min-width:0}
+.summary-item__name{font-size:14px;font-weight:500;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.summary-item__cat{font-size:11px;color:rgba(255,255,255,0.4)}
+.summary-item__right{text-align:right;flex-shrink:0}
+.summary-item__price{font-size:14px;font-weight:600;color:#fff}
+.summary-item__qty{font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px}
+.summary-item__remove{background:none;border:none;color:rgba(255,100,100,0.6);font-size:11px;cursor:pointer;padding:2px 6px;margin-top:4px;transition:color 0.2s}
+.summary-item__remove:hover{color:rgba(255,100,100,1)}
+
+.summary__divider{height:1px;background:rgba(255,255,255,0.1);margin:16px 0}
+
+.summary__row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.summary__label{font-size:14px;color:rgba(255,255,255,0.6)}
+.summary__value{font-size:14px;font-weight:500;color:#fff}
+.summary__total .summary__label{font-size:16px;font-weight:600;color:#fff}
+.summary__total .summary__value{font-size:20px;font-weight:700;background:linear-gradient(135deg,#fff,#ffe0a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* EMPTY CART */
+.empty-cart{text-align:center;padding:40px 20px}
+.empty-cart__icon{font-size:48px;margin-bottom:12px;opacity:0.5}
+.empty-cart__title{font-size:16px;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:8px}
+.empty-cart__text{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px}
+.empty-cart__btn{display:inline-flex;align-items:center;gap:6px;padding:10px 24px;border-radius:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);font-size:13px;font-weight:500;text-decoration:none;transition:all 0.3s}
+.empty-cart__btn:hover{background:rgba(255,255,255,0.14);color:#fff}
+
+/* SUCCESS */
+.order-success{display:none;text-align:center;padding:60px 32px}
+.order-success--visible{display:block}
+.order-success__icon{font-size:64px;margin-bottom:16px}
+.order-success__title{font-size:24px;font-weight:700;color:#fff;margin-bottom:8px}
+.order-success__text{font-size:15px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:8px}
+.order-success__id{font-size:13px;color:rgba(90,195,185,0.8);font-weight:500;margin-bottom:24px}
+.order-success__btn{display:inline-flex;align-items:center;gap:6px;padding:12px 32px;border-radius:14px;background:linear-gradient(135deg,rgba(90,195,185,0.5),rgba(70,175,165,0.35));border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:14px;font-weight:600;text-decoration:none;transition:all 0.3s}
+.order-success__btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(80,180,170,0.25)}
+
+/* FOOTER */
+.footer{max-width:1200px;margin:40px auto 0;padding:20px 0;border-top:1px solid rgba(255,255,255,0.12);display:flex;justify-content:space-between;align-items:center}
+.footer__text{font-size:12px;color:rgba(255,255,255,0.4)}
+.footer__socials{display:flex;gap:8px}
+.footer__social{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.25s;text-decoration:none}
+.footer__social:hover{background:rgba(255,255,255,0.14);color:rgba(255,255,255,0.8)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.page-header{animation:fadeUp 0.6s ease 0.1s both}
+.order-layout{animation:fadeUp 0.6s ease 0.2s both}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+    .content{padding:0 20px 40px}
+    .order-layout{grid-template-columns:1fr}
+    .page-header{margin-top:80px;padding:28px 24px}
+    .page-header__title{font-size:22px}
+}
+@media(max-width:600px){
+    .content{padding:0 12px 30px}
+    .nav__bar{flex-wrap:wrap;justify-content:center;gap:4px;padding:10px 12px}
+    .nav__left,.nav__right{flex:auto;justify-content:center}
+    .nav__center{position:relative;left:auto;top:auto;transform:none;order:-1;width:100%;margin-bottom:8px}
+    .nav__logo{width:80px;height:80px}
+    .page-header{margin-top:16px}
+    .glass-card{padding:24px 16px}
+    .form-row{grid-template-columns:1fr}
+    .footer{flex-direction:column;gap:12px;text-align:center}
+}
+
+/* TEXT READABILITY */
+.form-label,.summary__label,.summary-item__name,.empty-cart__title,.order-success__text{text-shadow:0 1px 4px rgba(0,0,0,0.35)}
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="bg-overlay"></div>
+
+<div class="content">
+
+    <!-- NAV -->
+    <nav class="nav">
+        <div class="nav__bar">
+            <div class="nav__left">
+                <a href="index.html" class="nav__link">Accueil</a>
+                <a href="boutique.html" class="nav__link">Boutique</a>
+                <a href="apropos.html" class="nav__link">À Propos</a>
+            </div>
+            <div class="nav__center">
+                <a href="index.html"><img src="logo-kaledoshop.png" alt="Kaledoshop" class="nav__logo"></a>
+            </div>
+            <div class="nav__right">
+                <a href="#" class="nav__link">Orders</a>
+                <a href="contact.html" class="nav__link">Contact</a>
+                <div class="nav__icons">
+                    <div class="nav__icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></div>
+                    <div class="nav__icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <h1 class="page-header__title">Finaliser votre commande</h1>
+    </div>
+
+    <!-- ORDER FORM + SUMMARY -->
+    <div class="order-layout" id="order-layout">
+
+        <!-- CUSTOMER FORM -->
+        <div class="glass-card">
+            <h2 class="glass-card__title">Vos informations</h2>
+            <form id="order-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Nom *</label>
+                        <input type="text" class="form-input" id="o-lastname" placeholder="Nom" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Prénom *</label>
+                        <input type="text" class="form-input" id="o-firstname" placeholder="Prénom" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Email *</label>
+                        <input type="email" class="form-input" id="o-email" placeholder="votre@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Téléphone *</label>
+                        <input type="tel" class="form-input" id="o-phone" placeholder="+687 XX XX XX" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Adresse *</label>
+                    <input type="text" class="form-input" id="o-address" placeholder="Numéro et nom de rue" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Ville / Commune *</label>
+                        <select class="form-select" id="o-city" required>
+                            <option value="">Choisir...</option>
+                            <option value="Nouméa">Nouméa</option>
+                            <option value="Dumbéa">Dumbéa</option>
+                            <option value="Mont-Dore">Mont-Dore</option>
+                            <option value="Païta">Païta</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Code postal</label>
+                        <input type="text" class="form-input" id="o-zip" placeholder="98800">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Complément d'adresse</label>
+                    <input type="text" class="form-input" id="o-address2" placeholder="Appartement, bâtiment, étage...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Message / Instructions</label>
+                    <textarea class="form-textarea" id="o-message" placeholder="Instructions de livraison, commentaire..."></textarea>
+                </div>
+
+                <button type="submit" class="form-btn" id="order-btn">
+                    Confirmer la commande
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+                </button>
+            </form>
+        </div>
+
+        <!-- ORDER SUMMARY -->
+        <div class="glass-card">
+            <h2 class="glass-card__title">Récapitulatif</h2>
+            <div class="summary__items" id="summary-items">
+                <!-- Filled by JS -->
+            </div>
+            <div class="summary__divider"></div>
+            <div class="summary__row">
+                <span class="summary__label">Sous-total</span>
+                <span class="summary__value" id="summary-subtotal">0 XPF</span>
+            </div>
+            <div class="summary__row">
+                <span class="summary__label">Livraison</span>
+                <span class="summary__value" id="summary-shipping">Gratuite</span>
+            </div>
+            <div class="summary__divider"></div>
+            <div class="summary__row summary__total">
+                <span class="summary__label">Total</span>
+                <span class="summary__value" id="summary-total">0 XPF</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- EMPTY CART -->
+    <div class="empty-cart glass-card" id="empty-cart" style="display:none;max-width:600px;margin:0 auto">
+        <div class="empty-cart__icon">🛒</div>
+        <h2 class="empty-cart__title">Votre panier est vide</h2>
+        <p class="empty-cart__text">Ajoutez des produits depuis la boutique pour passer commande.</p>
+        <a href="boutique.html" class="empty-cart__btn">Voir la boutique →</a>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="order-success glass-card" id="order-success" style="max-width:600px;margin:0 auto">
+        <div class="order-success__icon">🦅</div>
+        <h2 class="order-success__title">Commande confirmée !</h2>
+        <p class="order-success__text">Merci pour votre commande. Vous recevrez un email de confirmation avec les détails de livraison.</p>
+        <p class="order-success__id" id="order-id"></p>
+        <a href="boutique.html" class="order-success__btn">Continuer mes achats →</a>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <span class="footer__text">© 2026 Kaledoshop — Nouméa, Nouvelle-Calédonie</span>
+        <div class="footer__socials">
+            <a href="#" class="footer__social"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3V2z"/></svg></a>
+            <a href="#" class="footer__social"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" class="footer__social"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 001.94-2A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98" fill="#0c0a08"/></svg></a>
+        </div>
+    </footer>
+
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+// ── Cart from localStorage ──
+let cart = JSON.parse(localStorage.getItem('kaledoshop-cart') || '[]');
+
+const orderLayout = document.getElementById('order-layout');
+const emptyCart = document.getElementById('empty-cart');
+const orderSuccess = document.getElementById('order-success');
+const summaryItems = document.getElementById('summary-items');
+
+function renderSummary() {
+    if (cart.length === 0) {
+        orderLayout.style.display = 'none';
+        emptyCart.style.display = 'block';
+        return;
+    }
+
+    orderLayout.style.display = 'grid';
+    emptyCart.style.display = 'none';
+
+    summaryItems.innerHTML = cart.map((item, i) => {
+        const imgHtml = item.image
+            ? `<img src="${item.image}" class="summary-item__img">`
+            : `<div class="summary-item__img summary-item__img--placeholder">📦</div>`;
+        return `<div class="summary-item">
+            ${imgHtml}
+            <div class="summary-item__info">
+                <div class="summary-item__name">${item.name}</div>
+                <div class="summary-item__cat">${item.cat || ''}</div>
+            </div>
+            <div class="summary-item__right">
+                <div class="summary-item__price">${fmtXPF(item.price * (item.qty || 1))}</div>
+                <div class="summary-item__qty">Qté: ${item.qty || 1}</div>
+                <button class="summary-item__remove" onclick="removeItem(${i})">✕ Retirer</button>
+            </div>
+        </div>`;
+    }).join('');
+
+    const subtotal = cart.reduce((sum, item) => sum + item.price * (item.qty || 1), 0);
+    document.getElementById('summary-subtotal').textContent = fmtXPF(subtotal);
+    document.getElementById('summary-total').textContent = fmtXPF(subtotal);
+}
+
+function removeItem(index) {
+    cart.splice(index, 1);
+    localStorage.setItem('kaledoshop-cart', JSON.stringify(cart));
+    renderSummary();
+}
+
+renderSummary();
+
+// ── Check for quick order (single product from URL) ──
+const urlParams = new URLSearchParams(window.location.search);
+const quickProductId = urlParams.get('product');
+
+if (quickProductId) {
+    db.collection('products').doc(quickProductId).get().then(doc => {
+        if (doc.exists) {
+            const p = doc.data();
+            const exists = cart.find(item => item.id === doc.id);
+            if (!exists) {
+                cart.push({ id: doc.id, name: p.name, price: p.price, cat: p.cat, image: p.image || null, qty: 1 });
+                localStorage.setItem('kaledoshop-cart', JSON.stringify(cart));
+            }
+            renderSummary();
+        }
+    });
+}
+
+// ── Submit Order ──
+document.getElementById('order-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('order-btn');
+    btn.textContent = 'Envoi en cours...';
+    btn.disabled = true;
+
+    const order = {
+        customer: {
+            lastName: document.getElementById('o-lastname').value.trim(),
+            firstName: document.getElementById('o-firstname').value.trim(),
+            email: document.getElementById('o-email').value.trim(),
+            phone: document.getElementById('o-phone').value.trim(),
+            address: document.getElementById('o-address').value.trim(),
+            address2: document.getElementById('o-address2').value.trim() || null,
+            city: document.getElementById('o-city').value,
+            zip: document.getElementById('o-zip').value.trim() || null,
+        },
+        message: document.getElementById('o-message').value.trim() || null,
+        items: cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            qty: item.qty || 1,
+            cat: item.cat || null,
+            image: item.image || null,
+        })),
+        total: cart.reduce((sum, item) => sum + item.price * (item.qty || 1), 0),
+        status: 'nouvelle',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+
+    try {
+        const docRef = await db.collection('orders').add(order);
+        
+        // Clear cart
+        localStorage.removeItem('kaledoshop-cart');
+        cart = [];
+
+        // Show success
+        orderLayout.style.display = 'none';
+        document.querySelector('.page-header').style.display = 'none';
+        orderSuccess.classList.add('order-success--visible');
+        document.getElementById('order-id').textContent = 'Commande #' + docRef.id.substring(0, 8).toUpperCase();
+    } catch (err) {
+        console.error('Erreur commande:', err);
+        btn.textContent = 'Erreur, réessayez';
+        btn.disabled = false;
+        setTimeout(() => {
+            btn.innerHTML = 'Confirmer la commande <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>';
+        }, 2000);
+    }
+});
+</script>
+</body>
+</html>
