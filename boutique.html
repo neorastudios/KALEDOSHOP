@@ -714,7 +714,7 @@ function renderProducts(products) {
             : `<span class="product-card__placeholder">${p.emoji || '📦'}</span>`;
 
         return `
-            <div class="product-card">
+            <div class="product-card" onclick="window.location='produit.html?id=${p.id}'">
                 <div class="product-card__img">
                     ${imgContent}
                     ${p.tag ? `<span class="product-card__tag ${tagClass}">${p.tag}</span>` : ''}

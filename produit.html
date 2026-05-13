@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaledoshop — Produit</title>
+<link rel="icon" type="image/png" href="logo-kaledoshop.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Pacifico&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;color:#fff;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(100,200,190,0.3)}
+
+.bg{position:fixed;inset:0;z-index:0;background:url('bg-tropical.png') center/cover no-repeat;filter:blur(6px);transform:scale(1.04)}
+.bg-overlay{position:fixed;inset:0;z-index:1;background:radial-gradient(ellipse at 50% 40%,transparent 30%,rgba(0,0,0,0.15) 100%),linear-gradient(180deg,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.12) 100%)}
+.content{position:relative;z-index:10;min-height:100vh;padding:0 32px 60px}
+
+/* NAV */
+.nav{max-width:1200px;margin:0 auto;padding:40px 0 0;position:relative}
+.nav__bar{display:flex;align-items:center;padding:8px 16px;border-radius:18px;background:rgba(255,255,255,0.18);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.3);box-shadow:0 4px 24px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.3);min-height:48px;position:relative}
+.nav__left,.nav__right{display:flex;gap:4px;align-items:center;flex:1}
+.nav__left{justify-content:flex-start}
+.nav__right{justify-content:flex-end}
+.nav__link{font-size:14px;font-weight:500;color:rgba(255,255,255,0.8);text-decoration:none;padding:8px 18px;border-radius:12px;transition:all 0.25s;text-shadow:0 1px 3px rgba(0,0,0,0.1);white-space:nowrap}
+.nav__link:hover{background:rgba(255,255,255,0.12)}
+.nav__center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;z-index:5}
+.nav__logo{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.35)) drop-shadow(0 8px 30px rgba(0,0,0,0.2));border-radius:50%;transition:transform 0.4s ease}
+.nav__logo:hover{transform:scale(1.05)}
+.nav__icons{display:flex;gap:6px;margin-left:4px}
+.nav__icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.65);cursor:pointer;transition:all 0.25s;text-decoration:none}
+.nav__icon:hover{background:rgba(255,255,255,0.12);color:#fff}
+.cart-link{position:relative}
+.cart-badge{position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:rgba(90,195,185,0.9);color:#fff;font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.2)}
+
+/* PRODUCT LAYOUT */
+.product-layout{max-width:1200px;margin:80px auto 32px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+
+.glass-card{border-radius:24px;background:rgba(255,255,255,0.12);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,0.22);box-shadow:0 8px 36px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.2);overflow:hidden}
+
+/* IMAGE */
+.product-image{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:rgba(255,255,255,0.04)}
+.product-image img{width:100%;height:100%;object-fit:cover}
+.product-image__placeholder{font-size:80px;opacity:0.4}
+.product-image__tag{position:absolute;top:16px;left:16px;padding:6px 16px;border-radius:10px;font-size:12px;font-weight:600;letter-spacing:0.05em;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.product-image__tag--new{background:rgba(90,195,185,0.25);border:1px solid rgba(90,195,185,0.3);color:rgba(180,255,245,0.9)}
+.product-image__tag--promo{background:rgba(220,80,80,0.25);border:1px solid rgba(220,80,80,0.3);color:rgba(255,180,180,0.9)}
+.product-image__tag--best{background:rgba(220,180,80,0.25);border:1px solid rgba(220,180,80,0.3);color:rgba(255,230,160,0.9)}
+.product-image__discount{position:absolute;top:16px;right:16px;padding:6px 14px;border-radius:10px;font-size:12px;font-weight:700;background:rgba(220,80,80,0.8);color:#fff}
+
+/* DETAILS */
+.product-details{padding:36px}
+.product-details__cat{font-size:13px;font-weight:500;color:rgba(90,195,185,0.8);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;text-shadow:0 1px 4px rgba(0,0,0,0.35)}
+.product-details__name{font-size:28px;font-weight:700;color:#fff;margin-bottom:16px;line-height:1.3;text-shadow:0 2px 8px rgba(0,0,0,0.35)}
+.product-details__desc{font-size:15px;color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:24px;text-shadow:0 1px 4px rgba(0,0,0,0.25)}
+
+.product-details__prices{display:flex;align-items:baseline;gap:12px;margin-bottom:28px}
+.product-details__price{font-size:32px;font-weight:700;background:linear-gradient(135deg,#fff,#ffe0a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.product-details__price--promo{background:linear-gradient(135deg,#ff8080,#ff6060);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.product-details__old-price{font-size:18px;color:rgba(255,255,255,0.35);text-decoration:line-through}
+.product-details__discount{font-size:14px;font-weight:600;color:rgba(255,100,100,0.9);background:rgba(255,100,100,0.1);padding:4px 12px;border-radius:8px}
+
+/* QUANTITY */
+.quantity{display:flex;align-items:center;gap:0;margin-bottom:24px}
+.quantity__label{font-size:14px;font-weight:500;color:rgba(255,255,255,0.7);margin-right:16px}
+.quantity__btn{width:40px;height:40px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.quantity__btn:hover{background:rgba(255,255,255,0.12)}
+.quantity__value{width:50px;text-align:center;font-size:16px;font-weight:600;color:#fff;background:none;border:none;outline:none}
+
+/* BUTTONS */
+.product-actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn-cart{flex:1;padding:16px 24px;border-radius:14px;background:linear-gradient(135deg,rgba(90,195,185,0.5),rgba(70,175,165,0.35));border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.35s;box-shadow:0 4px 16px rgba(80,180,170,0.15);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-cart:hover{background:linear-gradient(135deg,rgba(90,195,185,0.65),rgba(70,175,165,0.5));transform:translateY(-2px);box-shadow:0 8px 28px rgba(80,180,170,0.25)}
+.btn-order{flex:1;padding:16px 24px;border-radius:14px;background:linear-gradient(135deg,#c9a04c,#a07830);border:none;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.35s;box-shadow:0 4px 16px rgba(180,130,40,0.3);display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn-order:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(180,130,40,0.4)}
+
+/* FEATURES */
+.product-features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+.feature-pill{display:flex;align-items:center;gap:8px;padding:12px 16px;border-radius:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1)}
+.feature-pill__icon{font-size:18px}
+.feature-pill__text{font-size:12px;color:rgba(255,255,255,0.6);text-shadow:0 1px 3px rgba(0,0,0,0.25)}
+
+/* BACK LINK */
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:rgba(255,255,255,0.6);text-decoration:none;margin:80px auto 16px;max-width:1200px;transition:color 0.2s;text-shadow:0 1px 3px rgba(0,0,0,0.25)}
+.back-link:hover{color:#fff}
+
+/* LOADING */
+.loading{text-align:center;padding:100px 40px;max-width:600px;margin:80px auto}
+.loading__icon{font-size:48px;margin-bottom:16px;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:0.5;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+.loading__text{font-size:16px;color:rgba(255,255,255,0.5)}
+
+/* FOOTER */
+.footer{max-width:1200px;margin:40px auto 0;padding:20px 0;border-top:1px solid rgba(255,255,255,0.12);display:flex;justify-content:space-between;align-items:center}
+.footer__text{font-size:12px;color:rgba(255,255,255,0.4)}
+.footer__socials{display:flex;gap:8px}
+.footer__social{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.25s;text-decoration:none}
+.footer__social:hover{background:rgba(255,255,255,0.14);color:rgba(255,255,255,0.8)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.product-layout{animation:fadeUp 0.7s ease 0.1s both}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+    .content{padding:0 20px 40px}
+    .product-layout{grid-template-columns:1fr;margin-top:80px}
+    .product-details__name{font-size:22px}
+    .product-details__price{font-size:26px}
+    .product-features{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+    .content{padding:0 12px 30px}
+    .nav__bar{flex-wrap:wrap;justify-content:center;gap:4px;padding:10px 12px}
+    .nav__left,.nav__right{flex:auto;justify-content:center}
+    .nav__center{position:relative;left:auto;top:auto;transform:none;order:-1;width:100%;margin-bottom:8px}
+    .nav__logo{width:80px;height:80px}
+    .product-details{padding:24px 16px}
+    .product-actions{flex-direction:column}
+    .footer{flex-direction:column;gap:12px;text-align:center}
+    .back-link{margin-top:16px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="bg-overlay"></div>
+
+<div class="content">
+
+    <!-- NAV -->
+    <nav class="nav">
+        <div class="nav__bar">
+            <div class="nav__left">
+                <a href="index.html" class="nav__link">Accueil</a>
+                <a href="boutique.html" class="nav__link">Boutique</a>
+                <a href="apropos.html" class="nav__link">À Propos</a>
+            </div>
+            <div class="nav__center">
+                <a href="index.html"><img src="logo-kaledoshop.png" alt="Kaledoshop" class="nav__logo"></a>
+            </div>
+            <div class="nav__right">
+                <a href="#" class="nav__link">Orders</a>
+                <a href="contact.html" class="nav__link">Contact</a>
+                <div class="nav__icons">
+                    <div class="nav__icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></div>
+                    <a href="commande.html" class="nav__icon cart-link"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg><span class="cart-badge" id="cart-badge">0</span></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BACK LINK -->
+    <a href="boutique.html" class="back-link" style="display:block">← Retour à la boutique</a>
+
+    <!-- LOADING -->
+    <div class="loading glass-card" id="loading">
+        <div class="loading__icon">🦅</div>
+        <p class="loading__text">Chargement du produit...</p>
+    </div>
+
+    <!-- PRODUCT LAYOUT (hidden until loaded) -->
+    <div class="product-layout" id="product-layout" style="display:none">
+        <!-- IMAGE -->
+        <div class="glass-card">
+            <div class="product-image" id="product-image"></div>
+        </div>
+
+        <!-- DETAILS -->
+        <div class="glass-card">
+            <div class="product-details">
+                <p class="product-details__cat" id="product-cat"></p>
+                <h1 class="product-details__name" id="product-name"></h1>
+                <p class="product-details__desc" id="product-desc"></p>
+                <div class="product-details__prices" id="product-prices"></div>
+
+                <!-- Quantity -->
+                <div class="quantity">
+                    <span class="quantity__label">Quantité</span>
+                    <button class="quantity__btn" onclick="changeQty(-1)">−</button>
+                    <input type="text" class="quantity__value" id="qty-value" value="1" readonly>
+                    <button class="quantity__btn" onclick="changeQty(1)">+</button>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="product-actions">
+                    <button class="btn-cart" id="btn-add-cart">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+                        Ajouter au panier
+                    </button>
+                    <a href="#" class="btn-order" id="btn-order">
+                        Commander maintenant
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+                    </a>
+                </div>
+
+                <!-- Features -->
+                <div class="product-features">
+                    <div class="feature-pill"><span class="feature-pill__icon">🚚</span><span class="feature-pill__text">Livraison Nouméa & Grand Nouméa</span></div>
+                    <div class="feature-pill"><span class="feature-pill__icon">🔒</span><span class="feature-pill__text">Paiement sécurisé</span></div>
+                    <div class="feature-pill"><span class="feature-pill__icon">↩️</span><span class="feature-pill__text">Retour sous 14 jours</span></div>
+                    <div class="feature-pill"><span class="feature-pill__icon">💬</span><span class="feature-pill__text">Service client réactif</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <span class="footer__text">© 2026 Kaledoshop — Nouméa, Nouvelle-Calédonie</span>
+        <div class="footer__socials">
+            <a href="#" class="footer__social"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3V2z"/></svg></a>
+            <a href="#" class="footer__social"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" class="footer__social"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 001.94-2A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98" fill="#0c0a08"/></svg></a>
+        </div>
+    </footer>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+let currentProduct = null;
+let qty = 1;
+let cart = JSON.parse(localStorage.getItem('kaledoshop-cart') || '[]');
+
+// Update cart badge
+function updateCartBadge() {
+    const badge = document.getElementById('cart-badge');
+    if (badge) {
+        badge.textContent = cart.length;
+        badge.style.display = cart.length > 0 ? 'flex' : 'none';
+    }
+}
+updateCartBadge();
+
+// Quantity
+function changeQty(delta) {
+    qty = Math.max(1, qty + delta);
+    document.getElementById('qty-value').value = qty;
+}
+
+// Load product from URL param
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get('id');
+
+if (!productId) {
+    document.getElementById('loading').innerHTML = '<div class="loading__icon">❌</div><p class="loading__text">Produit introuvable</p><a href="boutique.html" style="color:rgba(90,195,185,0.8);margin-top:12px;display:inline-block">← Retour à la boutique</a>';
+} else {
+    db.collection('products').doc(productId).get().then(doc => {
+        if (!doc.exists) {
+            document.getElementById('loading').innerHTML = '<div class="loading__icon">❌</div><p class="loading__text">Ce produit n\'existe plus</p><a href="boutique.html" style="color:rgba(90,195,185,0.8);margin-top:12px;display:inline-block">← Retour à la boutique</a>';
+            return;
+        }
+
+        currentProduct = { id: doc.id, ...doc.data() };
+        const p = currentProduct;
+
+        // Update page title
+        document.title = 'Kaledoshop — ' + p.name;
+
+        // Image
+        const imgEl = document.getElementById('product-image');
+        if (p.image) {
+            imgEl.innerHTML = `<img src="${p.image}" alt="${p.name}">`;
+        } else {
+            imgEl.innerHTML = '<span class="product-image__placeholder">📦</span>';
+        }
+
+        // Tag
+        if (p.tag) {
+            const tagClass = p.tag === 'Nouveau' ? 'product-image__tag--new' : p.tag === 'Promo' ? 'product-image__tag--promo' : 'product-image__tag--best';
+            imgEl.innerHTML += `<span class="product-image__tag ${tagClass}">${p.tag}</span>`;
+        }
+
+        // Discount
+        const hasDiscount = p.oldPrice && p.oldPrice > p.price;
+        if (hasDiscount) {
+            const pct = Math.round((1 - p.price / p.oldPrice) * 100);
+            imgEl.innerHTML += `<span class="product-image__discount">-${pct}%</span>`;
+        }
+
+        // Details
+        document.getElementById('product-cat').textContent = p.cat || '';
+        document.getElementById('product-name').textContent = p.name;
+        document.getElementById('product-desc').textContent = p.desc || 'Produit disponible sur Kaledoshop. Livraison en Nouvelle-Calédonie.';
+
+        // Prices
+        const pricesEl = document.getElementById('product-prices');
+        pricesEl.innerHTML = `
+            <span class="product-details__price ${hasDiscount ? 'product-details__price--promo' : ''}">${fmtXPF(p.price)}</span>
+            ${hasDiscount ? '<span class="product-details__old-price">' + fmtXPF(p.oldPrice) + '</span>' : ''}
+            ${hasDiscount ? '<span class="product-details__discount">-' + Math.round((1 - p.price / p.oldPrice) * 100) + '%</span>' : ''}
+        `;
+
+        // Order button
+        document.getElementById('btn-order').href = 'commande.html?product=' + doc.id;
+
+        // Show layout, hide loading
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('product-layout').style.display = 'grid';
+
+    }).catch(err => {
+        console.error(err);
+        document.getElementById('loading').innerHTML = '<div class="loading__icon">❌</div><p class="loading__text">Erreur de chargement</p>';
+    });
+}
+
+// Add to cart
+document.getElementById('btn-add-cart').addEventListener('click', () => {
+    if (!currentProduct) return;
+
+    const existing = cart.find(item => item.id === currentProduct.id);
+    if (existing) {
+        existing.qty = (existing.qty || 1) + qty;
+    } else {
+        cart.push({
+            id: currentProduct.id,
+            name: currentProduct.name,
+            price: currentProduct.price,
+            cat: currentProduct.cat || null,
+            image: currentProduct.image || null,
+            qty: qty
+        });
+    }
+    localStorage.setItem('kaledoshop-cart', JSON.stringify(cart));
+    updateCartBadge();
+
+    const btn = document.getElementById('btn-add-cart');
+    btn.innerHTML = '✓ Ajouté au panier';
+    btn.style.background = 'rgba(42,110,78,0.6)';
+    setTimeout(() => {
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg> Ajouter au panier';
+        btn.style.background = '';
+    }, 1500);
+});
+</script>
+</body>
+</html>
